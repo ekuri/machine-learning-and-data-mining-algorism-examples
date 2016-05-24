@@ -52,11 +52,16 @@ public:
         }
     }
 
+    inline bool isMatch(size_t index, const std::vector<double> &row) {
+        return index == classifySingle(row);
+    }
+
     inline void classify(const std::vector<std::vector<double> > &data) {
         std::vector<std::vector<std::vector<double> > > currentClassify;
         currentClassify.resize(contain.size());
         for (size_t count = 0; count < data.size(); count++) {
-            classifySingle(data[count], currentClassify);
+            size_t classifiedResult = classifySingle(data[count]);
+            currentClassify[classifiedResult].push_back(data[count]);
         }
 
         size_t rowCount = 0;
@@ -119,7 +124,7 @@ private:
         }
     }
 
-    inline void classifySingle(const std::vector<double> &row, std::vector<std::vector<std::vector<double> > > &currentClassify) {
+    inline size_t classifySingle(const std::vector<double> &row) {
         size_t minRowIndex = 0;
         double minDistance = DBL_MAX;
         double currentDistance = 0.0;
@@ -130,7 +135,7 @@ private:
                 minDistance = currentDistance;
             }
         }
-        currentClassify[minRowIndex].push_back(row);
+        return minRowIndex;
     }
 
     inline double computeDistance(const std::vector<double> &left, const std::vector<double> &right) {

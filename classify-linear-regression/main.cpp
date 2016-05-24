@@ -1,14 +1,17 @@
 #include "csv.h"
 #include "classify.h"
+#include "linear_regression.h"
 #include <iostream>
 #include <signal.h>
 
 const size_t rowLength = 386;
-Classify classifier(10, rowLength - 1);
+const size_t classesCount = 10;
+Classify classifier(classesCount, rowLength - 1);
+std::vector<LinearRegression> regressionRunner(classesCount);
 
 void catchSignal(int signal) {
     if (signal == SIGINT) {
-        classifier.save();
+        //classifier.save();
         std::cout << "Interrupted. Exiting...";
         exit(0);
     }
@@ -21,15 +24,20 @@ int main()
     CSV::readDataFromFile(trainFile, data, rowLength);
 
     classifier.restore();
-    classifier.classify(data);
-    /*classifier.initContain(data);
-    signal(SIGINT, &catchSignal);
-    while (true) {
-        classifier.classify(data);
-    }*/
-    //classifier.restore();
-    //classifier.printContain();
-    //classifier.printContain();
+    for (size_t count = 0; count < regressionRunner.size(); count++) {
+        regressionRunner[count].init(rowLength - 1, count);
+        regressionRunner[count].tryToAddData(data, classifier);
+    }
+    while(true) {
+        double sumVarivance = 0.0;
+        double currentVarivance;
+        for (size_t count = 0; count < regressionRunner.size(); count++) {
+            currentVarivance = regressionRunner[count].compute(1);
+            sumVarivance += currentVarivance;
+            std::cout << currentVarivance << " ";
+        }
+        std::cout << std::endl << "Sum varivance: " << sumVarivance << std::endl;
+    }
     return 0;
 }
 

@@ -42,7 +42,7 @@ inline void linearRegression(const vector<vector<double> > &data) {
         }
 
         currentError = computeVarivance(currentPrediction, noError);
-        cout << "current prediction varivance: " << currentError << endl;
+        cout << "current prediction mean varivance: " << currentError / data.size() << endl;
     } while (currentError > errorTolerance);
 
     cout << "Writing to resume file." << endl;
