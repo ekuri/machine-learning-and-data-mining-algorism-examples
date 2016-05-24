@@ -50,7 +50,7 @@ inline void readDataFromFile(const char *dataFilename, vector<vector<double> > &
         infile.close();
 
         time(&end);
-        cout << "Data read cost " << difftime(end, start) << "s" << endl;
+        cout << "Data read cost " << difftime(end, start) << "s. " << data.size() << " records in" << endl;
     }
 }
 

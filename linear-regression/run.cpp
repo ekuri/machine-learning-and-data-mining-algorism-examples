@@ -21,7 +21,7 @@ void catchSignal(int signal) {
 }
 
 int main () {
-    cout << "t to train. r ro run test"<< endl;
+    cout << "t to train. r ro run test. c to classify"<< endl;
     char command = getchar();
     getchar(); // read \n
     if (command == 't') {
@@ -37,8 +37,12 @@ int main () {
 
         signal(SIGINT, &catchSignal);
         linearRegression(data);
-    } else {
+    } else if (command == 'r') {
         run();
+    } else if (command == 'c') {
+        cout << "numbers of classes: ";
+        int classCount;
+        cin >> classCount
     }
 
     return 0;
