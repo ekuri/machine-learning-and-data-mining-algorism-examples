@@ -1,6 +1,8 @@
 #ifndef LINEAR_REGRESSION_H
 #define LINEAR_REGRESSION_H
 
+#include <math.h>
+
 const size_t rowLength = 386;
 const size_t rowCount = 26000;
 const double errorTolerance = 1;

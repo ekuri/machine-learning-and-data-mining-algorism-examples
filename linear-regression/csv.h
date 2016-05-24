@@ -12,7 +12,7 @@ const char resultFilename[] = "result";
 inline void getDataFromString(const string &line, vector<double> &data, size_t rowLength) {
     unsigned int start = 0;
     const char* lineCharArray = line.c_str();
-    unsigned int end = 0;
+    size_t end = 0;
     while (end != string::npos) {
         end = line.find(',', start);
         data.push_back(strtod(lineCharArray + start, NULL));

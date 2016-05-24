@@ -20,14 +20,14 @@ void catchSignal(int signal) {
     }
 }
 
-int main (int argc, char **argv) {
-    if (argc < 2 || argc > 3) {
-        cout << "Invalid arguement" << endl;
-        return 1;
-    }
-
-    if (strcmp(argv[1], "regression") == 0) {
-        if (argc == 3 && strcmp(argv[2], "resume") == 0) {
+int main () {
+    cout << "t to train. r ro run test"<< endl;
+    char command = getchar();
+    getchar(); // read \n
+    if (command == 't') {
+        cout << "resume from " << resultFilename << "?(y/n)";
+        command = getchar();
+        if (command == 'y') {
             readFromResumeFile(linearRegressionResult, resultFilename);
         }
         vector<vector<double> > data(rowCount);
@@ -40,5 +40,6 @@ int main (int argc, char **argv) {
     } else {
         run();
     }
+
     return 0;
 }
