@@ -41,8 +41,6 @@ int main () {
         run();
     } else if (command == 'c') {
         cout << "numbers of classes: ";
-        int classCount;
-        cin >> classCount
     }
 
     return 0;
