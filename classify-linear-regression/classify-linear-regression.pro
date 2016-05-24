@@ -12,5 +12,6 @@ SOURCES += main.cpp
 HEADERS += \
     csv.h \
     classify.h \
-    linear_regression.h
+    linear_regression.h \
+    linear_regression_runner.h
 

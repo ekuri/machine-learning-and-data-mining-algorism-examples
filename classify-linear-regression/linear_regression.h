@@ -17,6 +17,23 @@ private:
 public:
     LinearRegression() {}
 
+    inline std::vector<double> getResult() {
+        return result;
+    }
+    inline void setResult(const std::vector<double> &target) {
+        result = target;
+    }
+    inline std::vector<std::vector<double> > getData() const
+    {
+        return data;
+    }
+
+    inline void setData(const std::vector<std::vector<double> > &value)
+    {
+        data = value;
+    }
+
+
     LinearRegression(size_t rowLength, size_t classifierIndex) {
         result.resize(rowLength);
         errorTolerance = 1;
@@ -61,7 +78,7 @@ public:
             currentError = computeVarivance(currentPrediction, noError);
             //cout << "current prediction varivance: " << currentError << endl;
         } while (--iteration);
-        return currentError;
+        return currentError / data.size();
     }
 
 private:
