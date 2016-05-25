@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <assert.h>
+#include <time.h>
 #include <fstream>
 
 class Classify {
@@ -35,6 +36,7 @@ public:
     }
 
     inline void initContain(const std::vector<std::vector<double> > &data) {
+        srand(time(NULL));
         for (size_t count = 0; count < contain.size(); count++) {
             size_t randomIndex = rand() % data.size();
             for (size_t index = 0; index < contain[count].size(); index++) {

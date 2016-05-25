@@ -7,8 +7,10 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
-    classify.cpp
+SOURCES += \
+    classify.cpp \
+    regression.cpp \
+    test.cpp
 
 HEADERS += \
     csv.h \

@@ -20,7 +20,7 @@ int main()
     classifier.classify(data);
     std::cout << "Done classifying" << std::endl;
     regressionRunner.init(data, classifier, rowLength - 1);
-    std::cout << "Done init regression runner" << std::endl;
+    std::cout << "Done initializing regression runner" << std::endl;
 
     classifier.save();
     std::cout << "Done saving classifier" << std::endl;
