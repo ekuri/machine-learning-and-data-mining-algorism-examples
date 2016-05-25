@@ -74,6 +74,20 @@ public:
         computeContain(currentClassify);
     }
 
+    inline size_t classifySingle(const std::vector<double> &row) {
+        size_t minRowIndex = 0;
+        double minDistance = DBL_MAX;
+        double currentDistance = 0.0;
+        for (size_t count = 0; count < contain.size(); count++) {
+            currentDistance = computeDistance(contain[count], row);
+            if (currentDistance < minDistance) {
+                minRowIndex = count;
+                minDistance = currentDistance;
+            }
+        }
+        return minRowIndex;
+    }
+
     inline void save() {
         std::fstream classifyResultFile("classify.result", std::ios::out);
         if (!classifyResultFile) {
@@ -124,23 +138,9 @@ private:
         }
     }
 
-    inline size_t classifySingle(const std::vector<double> &row) {
-        size_t minRowIndex = 0;
-        double minDistance = DBL_MAX;
-        double currentDistance = 0.0;
-        for (size_t count = 0; count < contain.size(); count++) {
-            currentDistance = computeDistance(contain[count], row);
-            if (currentDistance < minDistance) {
-                minRowIndex = count;
-                minDistance = currentDistance;
-            }
-        }
-        return minRowIndex;
-    }
-
     inline double computeDistance(const std::vector<double> &left, const std::vector<double> &right) {
         double sum = 0.0;
-        assert(left.size() == right.size() - 1);
+        assert(left.size() == right.size() - 1 || left.size() == right.size());
         for (size_t count = 0; count < left.size(); count++) {
             sum += (left[count] - right[count]) * (left[count] - right[count]);
         }

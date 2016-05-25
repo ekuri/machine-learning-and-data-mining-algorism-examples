@@ -56,6 +56,15 @@ public:
         }
     }
 
+    inline double test(const std::vector<double> &row) {
+        assert(row.size() == result.size());
+        double sum = 0.0;
+        for (size_t count = 0; count < row.size(); count++) {
+            sum += row[count] * result[count];
+        }
+        return sum;
+    }
+
     inline double compute(size_t iteration) {
         //std::cout << "#" << classifierIndex << ": Compute with data count: " << data.size() << std::endl;
         vector<double> currentPrediction(data.size());

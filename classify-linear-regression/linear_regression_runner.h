@@ -39,6 +39,19 @@ public:
         return sumVarivance;
     }
 
+    inline void test(const std::vector<std::vector<double> > &data, Classify &classifier) {
+        std::fstream regressionTest("regression.test", std::ios::out);
+        if (!regressionTest) {
+            throw "regression.test can not write";
+        }
+        regressionTest << "Id,reference" << std::endl;
+        for (size_t count = 0; count < data.size(); count++) {
+            size_t currentClassIndex = classifier.classifySingle(data[count]);
+            regressionTest << count << "," << runs[currentClassIndex].test(data[count]) << std::endl;
+        }
+        regressionTest.close();
+    }
+
     inline void saveResult() {
         std::fstream regressionResult("regression.result", std::ios::out);
         if (!regressionResult) {
