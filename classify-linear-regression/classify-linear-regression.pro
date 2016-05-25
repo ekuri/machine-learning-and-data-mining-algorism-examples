@@ -16,5 +16,6 @@ HEADERS += \
     csv.h \
     classify.h \
     linear_regression.h \
-    linear_regression_runner.h
+    linear_regression_runner.h \
+    global_variable.h
 

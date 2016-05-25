@@ -1,13 +1,6 @@
-#include "csv.h"
-#include "classify.h"
-#include "linear_regression_runner.h"
+#include "global_variable.h"
 #include <iostream>
 #include <signal.h>
-
-const size_t rowLength = 386;
-const size_t classesCount = 10;
-Classify classifier(classesCount, rowLength - 1);
-LinearRegressionRunner regressionRunner(classesCount);
 
 void catchSignal(int signal) {
     if (signal == SIGINT) {
