@@ -57,21 +57,27 @@ public:
     }
 
     inline void classify(const std::vector<std::vector<double> > &data) {
-        std::vector<std::vector<std::vector<double> > > currentClassify;
-        currentClassify.resize(contain.size());
-        for (size_t count = 0; count < data.size(); count++) {
-            size_t classifiedResult = classifySingle(data[count]);
-            currentClassify[classifiedResult].push_back(data[count]);
-        }
+        std::vector<size_t> classesCount(contain.size());
+        std::vector<size_t> oldClassesCount(contain.size());
+        do {
+            oldClassesCount = classesCount;
+            std::vector<std::vector<std::vector<double> > > currentClassify;
+            currentClassify.resize(contain.size());
+            for (size_t count = 0; count < data.size(); count++) {
+                size_t classifiedResult = classifySingle(data[count]);
+                currentClassify[classifiedResult].push_back(data[count]);
+            }
 
-        size_t rowCount = 0;
-        for (size_t count = 0; count < currentClassify.size(); count++) {
-            rowCount += currentClassify[count].size();
-            std::cout << currentClassify[count].size() << " ";
-        }
-        std::cout << std::endl;
-        assert(rowCount == data.size());
-        computeContain(currentClassify);
+            size_t rowCount = 0;
+            for (size_t count = 0; count < currentClassify.size(); count++) {
+                classesCount[count] = currentClassify[count].size();
+                rowCount += currentClassify[count].size();
+                std::cout << currentClassify[count].size() << " ";
+            }
+            std::cout << std::endl;
+            assert(rowCount == data.size());
+            computeContain(currentClassify);
+        } while (classesCount != oldClassesCount);
     }
 
     inline size_t classifySingle(const std::vector<double> &row) {
