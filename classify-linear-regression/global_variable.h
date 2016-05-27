@@ -6,7 +6,7 @@
 #include "linear_regression_runner.h"
 
 const size_t rowLength = 386;
-const size_t classesCount = 10;
+const size_t classesCount = 60;
 Classify classifier(classesCount, rowLength - 1);
 LinearRegressionRunner regressionRunner(classesCount);
 
