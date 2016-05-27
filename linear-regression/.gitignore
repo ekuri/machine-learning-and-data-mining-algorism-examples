@@ -1,1 +1,4 @@
 result
+*.user
+*.out
+*.csv
