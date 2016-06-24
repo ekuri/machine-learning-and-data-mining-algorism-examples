@@ -9,10 +9,11 @@
 
 using namespace::std;
 
-int compareFile()
+int compareFile(int argc, char **argv)
 {
-    fstream leftFile("result.data");
-    fstream rightFile("result1.csv");
+    assert(argc == 2);
+    fstream leftFile(argv[1]);
+    fstream rightFile(argv[2]);
     if (!leftFile || !rightFile) {
         cout << "at least one compare file can not open" << endl;
     }

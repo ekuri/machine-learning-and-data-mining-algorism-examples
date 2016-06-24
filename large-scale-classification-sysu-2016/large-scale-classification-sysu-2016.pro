@@ -12,5 +12,6 @@ HEADERS += \
     data.h \
     decisiontree.h \
     comparefile.h \
-    split.h
+    split.h \
+    merge.h
     decisiontree.h
