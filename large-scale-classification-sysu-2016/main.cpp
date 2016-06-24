@@ -1,15 +1,14 @@
-#include "decisiontree.h"
+#include "comparefile.h"
+#include "generaterandomdata.cpp"
+#include "randomforest.cpp"
 #include <iostream>
 
 using namespace::std;
 
 int main()
 {
-    Data data;
-    cout << data.readFromFile("train.txt") << endl;
-    Data rData;
-    cout << endl << rData.randomizeFromData(data) << endl;
-    DecisionTree singleTree;
-    singleTree.build(rData);
+    //generateRandomData();
+    //randomForest();
+    compareFile();
     return 0;
 }

@@ -3,11 +3,14 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp \
+SOURCES += \
+    randomforest.cpp \
+    main.cpp \
     generaterandomdata.cpp \
-    randomforest.cpp
+    compare.cpp
 
 HEADERS += \
     data.h \
-    decisiontree.h
+    decisiontree.h \
+    comparefile.h
     decisiontree.h

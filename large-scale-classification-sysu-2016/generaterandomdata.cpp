@@ -3,18 +3,23 @@
 
 using namespace::std;
 
-int main()
+int generateRandomData()
 {
     Data data;
-    cout << data.readFromFile("train.txt") << endl;
-    size_t treeCount = 300;
+    cout << "data reading: " << data.readFromFile("train.txt") << endl;
+    cout << "included column: " << data.formColumnIncluded() << endl;
+
+    //fstream columnRateFile("column.rate", ios::out);
+    //data.writeColumnRate(columnRateFile);
+    size_t treeCount = Data::treeCount;
 
     fstream out("random.data", ios::out);
     fstream in("random.data");
     out << treeCount << endl;
     for (size_t count = 0; count < treeCount; count++) {
         Data rData;
-        cout << "randomizing " << count << ": " << rData.randomizeFromData(data) << endl;
+        cout << "randomizing " << count << ": " << rData.randomizeFromData(data);
+        cout << " column: " << rData.getColumnIncluded().size() << endl;
         rData.writeToRandomFile(out);
     }
 
