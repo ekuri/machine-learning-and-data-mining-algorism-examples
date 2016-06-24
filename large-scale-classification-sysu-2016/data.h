@@ -167,7 +167,7 @@ public:
         srand(time(NULL));
 
         // get random line
-        size_t linesCount = origin.data.size() / treeCount;
+        size_t linesCount = origin.data.size() * 2 / treeCount;
         size_t index = 0;
         for (size_t count = 0; count < linesCount; count++) {
             index = (rand() + index) % origin.data.size();
@@ -273,8 +273,8 @@ public:
     }
 };
 
-size_t Data::treeCount = 50;
-size_t Data::columnIncludedBound = 10000;
+size_t Data::treeCount = 800;
+size_t Data::columnIncludedBound = 5000;
 
 #endif // DATA_H
 

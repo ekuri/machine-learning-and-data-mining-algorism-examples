@@ -124,7 +124,7 @@ public:
 
         std::vector<size_t> trueCount, positiveCount, negativeCount;
         std::vector<double> entropy;
-        std::cout << "getting count. data size: " << data.size() << std::endl;
+        //std::cout << "getting count. data size: " << data.size() << std::endl;
         data.getCount(trueCount, positiveCount, negativeCount);
         //std::cout << "computing entropy. column included: " << columnIncluded.size() << std::endl;
         computeEntropy(trueCount, positiveCount, negativeCount, entropy, columnIncluded, data.size());

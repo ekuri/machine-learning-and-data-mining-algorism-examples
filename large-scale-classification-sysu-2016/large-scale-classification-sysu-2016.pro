@@ -6,11 +6,11 @@ CONFIG -= qt
 SOURCES += \
     randomforest.cpp \
     main.cpp \
-    generaterandomdata.cpp \
-    compare.cpp
+    generaterandomdata.cpp
 
 HEADERS += \
     data.h \
     decisiontree.h \
-    comparefile.h
+    comparefile.h \
+    split.h
     decisiontree.h

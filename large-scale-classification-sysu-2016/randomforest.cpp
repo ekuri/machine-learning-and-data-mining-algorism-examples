@@ -3,25 +3,26 @@
 
 using namespace::std;
 
-int randomForest()
+int randomForest(int argc, char** argv)
 {
+    assert(argc == 2);
     Data testData;
     cout << "reading test data" << endl;
     testData.readFromFile("test.txt");
 
     size_t treeCount;
-    fstream in("random.data");
+    fstream in(argv[1]);
     if (!in) {
         cout << "can not open random data file" << endl;
         return 1;
     }
 
     in >> treeCount;
-    treeCount = 4;
+    cout << "tree count: " << treeCount << endl;
 
     vector<size_t> prediction(testData.size());
-    fstream testResultFile("result.data", ios::out);
-    fstream testResultAccurateFile("result_accurate.data", ios::out);
+    fstream testResultFile((string(argv[1]) + ".result").c_str(), ios::out);
+    fstream testResultAccurateFile((string(argv[1]) + ".accurate.result").c_str(), ios::out);
     if (!testResultFile || !testResultAccurateFile) {
         cout << "result file can not open" << endl;
         return 1;
@@ -37,6 +38,7 @@ int randomForest()
 
     double currentPredictionRate;
     testResultFile << "id,label" << endl;
+    testResultAccurateFile << treeCount << endl;
     for (size_t count = 0; count < prediction.size(); count++) {
         currentPredictionRate = prediction[count] * 1.0 / treeCount;
         testResultFile << count << "," << ((currentPredictionRate > 0.5)?1:0) << endl;
