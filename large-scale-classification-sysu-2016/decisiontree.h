@@ -65,6 +65,10 @@ private:
                                  positiveCount[count], negativeCount[count]);
             //std::cout << positive[currentColumn] << " " << negative[currentColumn] << std::endl;
         }
+        /*for (size_t count = 0; count < columnIncluded.size(); count++) {
+            std::cout << entropy[count] << " ";
+        }
+        std::cout << std::endl;*/
     }
     inline void deleteContent(Item *currentNode) {
         if (NULL == currentNode)
@@ -129,28 +133,26 @@ public:
         //std::cout << "computing entropy. column included: " << columnIncluded.size() << std::endl;
         computeEntropy(trueCount, positiveCount, negativeCount, entropy, columnIncluded, data.size());
 
-        double minEntropy = 1.0;
-        size_t minColumn = columnIncluded[0];
         double currentEntropy;
+        size_t minIndex = 0;
         for (size_t count = 0; count < columnIncluded.size(); count++) {
+            if (columnIncluded[count] == fatherNode->column) {
+                continue;
+            }
             currentEntropy = entropy[count];
-            if (currentEntropy < minEntropy) {
-                minEntropy = currentEntropy;
-                minColumn = columnIncluded[count];
+            if (currentEntropy < entropy[minIndex]) {
+                minIndex = count;
             }
         }
-        //std::cout << "select " << minColumn << " with entropy: " << minEntropy << std::endl;
-        if (minColumn == fatherNode->column) {
+        //std::cout << "select " << columnIncluded[minIndex] << "(" << minIndex << ") with entropy: " << entropy[minIndex] << std::endl;
+        if (columnIncluded[minIndex] == fatherNode->column) {
             targetPrediction = data.getPrediction();
             return;
         }
-        currentNode = new Item(minColumn, minEntropy);
+        currentNode = new Item(columnIncluded[minIndex], entropy[minIndex]);
         Data trueSide, failSide;
-        data.clasify(trueSide, failSide, minColumn);
+        data.clasify(trueSide, failSide, minIndex);
         data = Data();
-        /*if (fatherNode->entropy - currentNode->entropy < errorTolerance) {
-            return;
-        }*/
         buildSubTree(trueSide, currentNode->left, currentNode, currentNode->leftPrediction);
         buildSubTree(failSide, currentNode->right, currentNode, currentNode->rightPrediction);
     }

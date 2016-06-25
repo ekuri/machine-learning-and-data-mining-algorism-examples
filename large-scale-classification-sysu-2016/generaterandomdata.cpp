@@ -14,20 +14,22 @@ int generateRandomData()
     size_t treeCount = Data::treeCount;
 
     fstream out("random.data", ios::out);
-    fstream in("random.data");
     out << treeCount << endl;
     for (size_t count = 0; count < treeCount; count++) {
         Data rData;
-        cout << "randomizing " << count << ": " << rData.randomizeFromData(data);
+        cout << "randomize " << count << ": " << rData.randomizeFromData(data);
         cout << " column: " << rData.getColumnIncluded().size() << endl;
         rData.writeToRandomFile(out);
     }
 
+    data = Data();
 
+    fstream in("random.data");
     in >> treeCount;
     for (size_t count = 0; count < treeCount; count++) {
         Data rData;
-        cout << "reading " << count << ": " << rData.readFromRandomFile(in) << endl;
+        cout << "verify " << count << ": " << rData.readFromRandomFile(in);
+        cout << " column: " << rData.getColumnIncluded().size() << endl;
     }
 
     return 0;

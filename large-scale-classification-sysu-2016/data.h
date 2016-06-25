@@ -38,22 +38,43 @@ private:
             start = dataLine.find(' ', start + 1);
         }
     }
+    inline void appendFromRandomStringLine(const std::string &dataLine) {
+        assert(columnIncluded.size() > 0);
+        const char * lineCharArray = dataLine.c_str();
+        labels.push_back(strtoul(lineCharArray, NULL, 0));
+        data.push_back(std::vector<size_t>());
+        data.back().resize(columnIncluded.size());
+        size_t start = dataLine.find(' ');
+        size_t pos;
+        while (start != std::string::npos) {
+            pos = strtoul(lineCharArray + start, NULL, 0);
+            if (pos == 0) {
+                assert(dataLine.find_first_not_of(' ', start) == std::string::npos);
+                break;
+            }
+            size_t index = 0;
+            for (; index < columnIncluded.size(); index++) {
+                if (columnIncluded[index] == pos) {
+                    data.back()[index] = pos;
+                    break;
+                }
+            }
+            assert(index != columnIncluded.size());
+            start = dataLine.find(' ', start + 1);
+        }
+    }
+
     inline void countAll(std::vector<size_t> &trueCount,
                          std::vector<size_t> &positiveCount,
                          std::vector<size_t> &negativeCount,
                          const size_t &row) {
         for (size_t index = 0; index < columnIncluded.size(); index++) {
-            size_t count = 0;
-            for (; count < data[row].size(); count++) {
-                if (data[row][count] == columnIncluded[index]) {
-                    trueCount[index]++;
-                    if (labels[row]) {
-                        positiveCount[index]++;
-                    }
-                    break;
+            if (data[row][index]) {
+                trueCount[index]++;
+                if (labels[row]) {
+                    positiveCount[index]++;
                 }
-            }
-            if (count == data[row].size() && labels[row]) {
+            } else if (labels[row]) {
                 negativeCount[index]++;
             }
         }
@@ -96,12 +117,7 @@ public:
         if (row >= data.size() || column > columnLength) {
             throw "data read out of range";
         }
-        for (size_t count = 0; count < data[row].size(); count++) {
-            if (data[row][count] == column) {
-                return true;
-            }
-        }
-        return false;
+        return std::binary_search(data[row].begin(), data[row].end(), column);
     }
 
     inline bool getPrediction() {
@@ -111,7 +127,7 @@ public:
                 trueCount++;
             }
         }
-        //std::cout << "Predict " << (trueCount * 1.0 / labels.size()) << std::endl;
+        //std::cout << "data count: " << data.size() << " predict " << (trueCount * 1.0 / labels.size()) << std::endl;
         return trueCount * 2 > labels.size();
     }
 
@@ -129,6 +145,18 @@ public:
                           << " data row length: " << data[count].size() << std::endl;
             }*/
         }
+        /*for (size_t count = 0; count < columnIncluded.size(); count++) {
+            std::cout << trueCount[count] << " ";
+        }
+        std::cout << std::endl;
+        for (size_t count = 0; count < columnIncluded.size(); count++) {
+            std::cout << positiveCount[count] << " ";
+        }
+        std::cout << std::endl;
+        for (size_t count = 0; count < columnIncluded.size(); count++) {
+            std::cout << negativeCount[count] << " ";
+        }
+        std::cout << std::endl;*/
     }
 
     inline size_t readFromFile(const char *fileName) {
@@ -164,34 +192,33 @@ public:
         data.clear();
         labels.clear();
         columnIncluded.clear();
-        srand(time(NULL));
-
-        // get random line
-        size_t linesCount = origin.data.size() * 2 / treeCount;
-        size_t index = 0;
-        for (size_t count = 0; count < linesCount; count++) {
-            index = (rand() + index) % origin.data.size();
-            //std::cout << index << " ";
-            data.push_back(origin.data[index]);
-            labels.push_back(origin.labels[index]);
-        }
-        //std::cout << std::endl;
-        assert(data.size() == labels.size());
 
         // include random column
         assert(origin.columnIncluded.size() > 0);
         size_t columnsIncludedCount = origin.columnIncluded.size() / 2;
-        index = 0;
+        size_t index = 0;
         for (size_t count = 0; count < columnsIncludedCount; count++) {
             index = (rand() + index) % origin.columnIncluded.size();
             columnIncluded.push_back(origin.columnIncluded[index]);
         }
-        //std::cout << std::endl;
+
         std::sort(columnIncluded.begin(), columnIncluded.end());
+
         // delete duplicated
         std::vector<size_t>::iterator it = std::unique(columnIncluded.begin(), columnIncluded.end());
         assert(columnIncluded.size() == columnsIncludedCount);
         columnIncluded.erase(it, columnIncluded.end());
+
+        // get random line
+        size_t linesCount = origin.data.size() * 3 / treeCount;
+        index = 0;
+        for (size_t count = 0; count < linesCount; count++) {
+            index = (rand() + index) % origin.data.size();
+            data.push_back(origin.data[index]);
+            labels.push_back(origin.labels[index]);
+        }
+        assert(data.size() == labels.size());
+
         return data.size();
     }
     inline void clasify(Data &trueSide, Data &failSide, const size_t &column) {
@@ -202,39 +229,38 @@ public:
         trueSide.columnIncluded = columnIncluded;
         failSide.columnIncluded = columnIncluded;
         for (size_t count = 0; count < data.size(); count++) {
-            size_t index = 0;
-            for (; index < data[count].size(); index++) {
-                if (data[count][index] == column) {
-                    trueSide.data.push_back(data[count]);
-                    trueSide.labels.push_back(labels[count]);
-                    break;
-                }
-            }
-            if (index >= data[count].size()) {
+            assert(column < data[count].size());
+            if (data[count][column]) {
+                trueSide.data.push_back(data[count]);
+                trueSide.labels.push_back(labels[count]);
+            } else {
                 failSide.data.push_back(data[count]);
                 failSide.labels.push_back(labels[count]);
             }
         }
+        //std::cout << "clssify left: " << trueSide.size() << " right: " << failSide.size() << std::endl;
     }
 
     inline void writeToRandomFile(std::fstream &outputFile) {
         if (!outputFile) {
             throw "output file can not open";
         }
+
         outputFile << columnIncluded.size() << std::endl;
-        for (size_t count = 0; count < columnIncluded.size(); count++) {
+        for (size_t count = 0; count < columnIncluded.size() - 1; count++) {
             outputFile << columnIncluded[count] << " ";
         }
-        outputFile << std::endl;
+        outputFile << columnIncluded.back() << std::endl;
         outputFile << data.size() << std::endl;
+
         for (size_t count = 0; count < data.size(); count++) {
             outputFile << labels[count] << " ";
             for (size_t index = 0; index < data[count].size() - 1; index++) {
-                if (checkInColumnIncluded(data[count][index])) {
+                if (std::binary_search(columnIncluded.begin(), columnIncluded.end(), data[count][index])) {
                     outputFile << data[count][index] << " ";
                 }
             }
-            if (checkInColumnIncluded(data[count].back())) {
+            if (std::binary_search(columnIncluded.begin(), columnIncluded.end(), data[count].back())) {
                 outputFile << data[count].back();
             }
             outputFile << std::endl;
@@ -266,15 +292,16 @@ public:
         randomFile.getline(buff, buffSize);
         for (size_t count = 0; count < dataLineCount; count++) {
             randomFile.getline(buff, buffSize);
-            this->appendFromStringLine(buff);
+            //std::cout << "reading line: " << count << std::endl;
+            this->appendFromRandomStringLine(buff);
         }
         assert(data.size() == labels.size());
         return data.size();
     }
 };
 
-size_t Data::treeCount = 800;
-size_t Data::columnIncludedBound = 5000;
+size_t Data::treeCount = 400;
+size_t Data::columnIncludedBound = 1000;
 
 #endif // DATA_H
 

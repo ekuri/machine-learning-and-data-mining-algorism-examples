@@ -21,12 +21,6 @@ int randomForest(int argc, char** argv)
     cout << "tree count: " << treeCount << endl;
 
     vector<size_t> prediction(testData.size());
-    fstream testResultFile((string(argv[1]) + ".result").c_str(), ios::out);
-    fstream testResultAccurateFile((string(argv[1]) + ".accurate.result").c_str(), ios::out);
-    if (!testResultFile || !testResultAccurateFile) {
-        cout << "result file can not open" << endl;
-        return 1;
-    }
 
     for (size_t count = 0; count < treeCount; count++) {
         Data rData;
@@ -34,6 +28,13 @@ int randomForest(int argc, char** argv)
         DecisionTree currentTree;
         currentTree.build(rData);
         currentTree.predict(testData, prediction);
+    }
+
+    fstream testResultFile((string(argv[1]) + ".result").c_str(), ios::out);
+    fstream testResultAccurateFile((string(argv[1]) + ".accurate.result").c_str(), ios::out);
+    if (!testResultFile || !testResultAccurateFile) {
+        cout << "result file can not open" << endl;
+        return 1;
     }
 
     double currentPredictionRate;

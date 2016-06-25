@@ -9,10 +9,11 @@ using namespace::std;
 
 int main(int argc, char** argv)
 {
+    srand(time(NULL));
     //generateRandomData();
-    //split(argc - 2, argv);
+    split(argc - 2, argv);
     //randomForest(argc, argv);
     //merge(argc - 2, argv);
-    compareFile(argc - 1, argv);
+    //compareFile(argc - 1, argv);
     return 0;
 }
